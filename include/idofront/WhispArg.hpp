@@ -72,6 +72,13 @@ class Flag
     bool _Value;
 };
 
+/// @brief Converts the Flag object to a string.
+std::ostream &operator<<(std::ostream &os, const Flag &flag)
+{
+    os << flag.ToString();
+    return os;
+}
+
 const Flag Flag::True = Flag(true);
 const Flag Flag::False = Flag(false);
 } // namespace type
@@ -143,7 +150,7 @@ template <typename T> class Argument
     }
 
     /// @brief Specifies whether the command-line argument is required.
-    Argument IsRequired(bool isRequired = true)
+    Argument IsRequired(bool isRequired)
     {
         _IsRequired = isRequired;
         return *this;
@@ -184,7 +191,10 @@ template <typename T> class Argument
         }
         ss << "\n";
         ss << "    " << _Description;
-        ss << " (Default: " << _DefaultValue << ")";
+        if (_DefaultValue.has_value())
+        {
+            ss << " (Default: " << _DefaultValue.value() << ")";
+        }
         return ss.str();
     }
 
@@ -192,12 +202,12 @@ template <typename T> class Argument
     std::string _Name;
     std::string _ShortName;
     std::string _Description;
-    T _DefaultValue;
+    std::optional<T> _DefaultValue;
     bool _IsRequired;
     std::optional<T> _Value;
 
     Argument(const std::string &shortName, const std::string &name)
-        : _Name(name), _ShortName(shortName), _Description(), _IsRequired(false)
+        : _Name(name), _ShortName(shortName), _Description(), _DefaultValue(std::nullopt), _IsRequired(false)
     {
     }
 
