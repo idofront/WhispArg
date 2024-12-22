@@ -31,13 +31,6 @@ foreach(plugin_dir ${plugin_dirs})
   endif()
 endforeach()
 
-# boost の設定
-find_package(Boost REQUIRED)
-
-# fmt の設定
-find_package(fmt REQUIRED)
-include_directories(${fmt_INCLUDE_DIRS})
-
 # Google Test の設定
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
@@ -69,8 +62,8 @@ foreach(MAIN_SOURCE ${MAIN_SOURCES})
   else()
     add_executable(${MAIN_NAME} ${MAIN_SOURCE})
   endif()
-  target_include_directories(${MAIN_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src ${fmt_INCLUDE_DIRS})
-  target_link_libraries(${MAIN_NAME} ${subproject_names} fmt::fmt ${Boost_LIBRARIES})
+  target_include_directories(${MAIN_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src)
+  target_link_libraries(${MAIN_NAME} ${subproject_names})
   target_compile_options(${MAIN_NAME} PRIVATE -Wall -Wextra)
 endforeach()
 
@@ -81,8 +74,8 @@ file(GLOB TEST_SOURCES "test/**/*.cpp")
 foreach(TEST_SOURCE ${TEST_SOURCES})
   get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
   add_executable(${TEST_NAME} ${TEST_SOURCE} $<TARGET_OBJECTS:Builder>)
-  target_include_directories(${TEST_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src ${fmt_INCLUDE_DIRS})
-  target_link_libraries(${TEST_NAME} ${subproject_names} fmt::fmt GTest::GTest GTest::Main)
+  target_include_directories(${TEST_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src)
+  target_link_libraries(${TEST_NAME} ${subproject_names} GTest::GTest GTest::Main)
   add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
   set_target_properties(${TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
   target_compile_options(${MAIN_NAME} PRIVATE -Wall -Wextra)
