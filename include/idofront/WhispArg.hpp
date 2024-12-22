@@ -184,7 +184,10 @@ template <typename T> class Argument
         }
         ss << "\n";
         ss << "    " << _Description;
-        ss << " (Default: " << _DefaultValue << ")";
+        if(_DefaultValue.has_value())
+        {
+            ss << " (Default: " << _DefaultValue.value() << ")";
+        }
         return ss.str();
     }
 
@@ -192,12 +195,12 @@ template <typename T> class Argument
     std::string _Name;
     std::string _ShortName;
     std::string _Description;
-    T _DefaultValue;
+    std::optional<T> _DefaultValue;
     bool _IsRequired;
     std::optional<T> _Value;
 
     Argument(const std::string &shortName, const std::string &name)
-        : _Name(name), _ShortName(shortName), _Description(), _IsRequired(false)
+        : _Name(name), _ShortName(shortName), _Description(), _DefaultValue(std::nullopt),_IsRequired(false)
     {
     }
 
