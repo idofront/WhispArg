@@ -26,10 +26,10 @@ int main(int argc, char *argv[])
 {
     try
     {
-        auto parser = idofront::argument::Parser(argc, argv);
+        auto parser = idofront::whisparg::WhispArg(argc, argv);
 
         auto helpWidthArgument =
-            idofront::argument::Argument<uint16_t>::New('w', "help-width")
+            idofront::whisparg::Argument<uint16_t>::New('w', "help-width")
                 .Description(
                     "The width of the help message, and the following is an example of a long text:\n"
                     "One cold rainy day when my father was a little boy, he met an old alley cat on his street. The "
@@ -45,21 +45,21 @@ int main(int argc, char *argv[])
         auto helpWidth = parser.Parse(helpWidthArgument);
 
         auto noDescriptionArgument =
-            idofront::argument::Argument<idofront::argument::type::Flag>::New('n', "no-description")
-                .Default(idofront::argument::type::Flag::False);
+            idofront::whisparg::Argument<idofront::whisparg::type::Flag>::New('n', "no-description")
+                .Default(idofront::whisparg::type::Flag::False);
         auto noDescription = parser.Parse(noDescriptionArgument);
 
-        auto lengthArgument = idofront::argument::Argument<uint8_t>::New('l', "length")
+        auto lengthArgument = idofront::whisparg::Argument<uint8_t>::New('l', "length")
                                   .Description("The length of the manager.")
                                   .Default(1);
         auto length = parser.Parse(lengthArgument);
 
-        auto messageArgument = idofront::argument::Argument<std::string>::New("message")
+        auto messageArgument = idofront::whisparg::Argument<std::string>::New("message")
                                    .Description("The message to be published.")
                                    .Default("Hello, world!");
         auto message = parser.Parse(messageArgument);
 
-        auto help = parser.Parse<idofront::argument::type::Flag>(idofront::argument::Help);
+        auto help = parser.Parse<idofront::whisparg::type::Flag>(idofront::whisparg::Help);
 
         if (help.Value().value())
         {
