@@ -143,7 +143,7 @@ template <typename T> class Argument
     }
 
     /// @brief Specifies whether the command-line argument is required.
-    Argument IsRequired(bool isRequired = true)
+    Argument IsRequired(bool isRequired)
     {
         _IsRequired = isRequired;
         return *this;
