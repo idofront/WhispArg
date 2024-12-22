@@ -30,3 +30,19 @@ TEST(FlagTest, StaticFlagFalseIsFalse)
     EXPECT_FALSE(f) << "Flag::False should evaluate to false.";
     EXPECT_EQ("false", f.ToString()) << "Expected string representation to be 'false'.";
 }
+
+TEST(FlagTest, OutputStreamOperatorShouldPrintCorrectValue)
+{
+    // Arrange
+    Flag trueFlag = Flag::True;   // true
+    Flag falseFlag = Flag::False; // false
+
+    // Act
+    std::stringstream ssTrue, ssFalse;
+    ssTrue << trueFlag;
+    ssFalse << falseFlag;
+
+    // Assert
+    EXPECT_EQ("true", ssTrue.str()) << "Expected the output to be 'true' for Flag::True.";
+    EXPECT_EQ("false", ssFalse.str()) << "Expected the output to be 'false' for Flag::False.";
+}
