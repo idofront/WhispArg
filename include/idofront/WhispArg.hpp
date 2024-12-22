@@ -38,6 +38,18 @@ namespace idofront
 {
 namespace whisparg
 {
+/// @brief An exception class for WhispArg.
+class WhispArgException : public std::exception
+{
+  public:
+    WhispArgException(const std::string &msg) : msg(msg)
+    {
+    }
+
+  private:
+    std::string msg;
+};
+
 namespace type
 {
 /// @brief A class for specifying flag options in the WhispArg.
@@ -269,7 +281,7 @@ std::optional<T> Parse(std::vector<std::string> argv, const Argument<T> &argumen
                     }
                     else
                     {
-                        throw std::invalid_argument("Argument \"" + argumentName + "\" requires a value.");
+                        throw WhispArgException("Argument \"" + argumentName + "\" requires a value.");
                     }
                 }
             }
@@ -280,10 +292,7 @@ std::optional<T> Parse(std::vector<std::string> argv, const Argument<T> &argumen
     {
         if (argument.IsRequired())
         {
-            std::stringstream ss;
-            ss << "Argument \"" << argumentName << "\" is required.";
-            auto message = ss.str();
-            throw std::invalid_argument(message);
+            throw WhispArgException "Argument \"" + argumentName + "\" is required.";
         }
 
         return argument.Default();
@@ -295,10 +304,7 @@ std::optional<T> Parse(std::vector<std::string> argv, const Argument<T> &argumen
     }
     catch (const std::exception &e)
     {
-        std::stringstream ss;
-        ss << "Failed to parse the argument \"" << argumentName << "\": " << e.what();
-        auto message = ss.str();
-        throw std::invalid_argument(message);
+        throw WhispArgException("Failed to parse the argument \"" + argumentName + "\": " + e.what())
     }
 }
 
@@ -379,7 +385,7 @@ template <typename T> std::optional<T> Parse(std::vector<std::string> argv, cons
                         }
                         catch (const std::exception &e)
                         {
-                            throw std::invalid_argument("Value must be either \"true\"(1) or \"false\"(0).");
+                            throw WhispArgException("Value must be either \"true\"(1) or \"false\"(0).");
                         }
                     }
                 };
@@ -390,7 +396,7 @@ template <typename T> std::optional<T> Parse(std::vector<std::string> argv, cons
             }
             else
             {
-                throw std::invalid_argument("Type not supported.");
+                WhispArgException("Type not supported.");
             }
         });
 
