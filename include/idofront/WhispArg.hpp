@@ -292,7 +292,7 @@ std::optional<T> Parse(std::vector<std::string> argv, const Argument<T> &argumen
     {
         if (argument.IsRequired())
         {
-            throw WhispArgException "Argument \"" + argumentName + "\" is required.";
+            throw WhispArgException("Argument \"" + argumentName + "\" is required.");
         }
 
         return argument.Default();
@@ -304,7 +304,7 @@ std::optional<T> Parse(std::vector<std::string> argv, const Argument<T> &argumen
     }
     catch (const std::exception &e)
     {
-        throw WhispArgException("Failed to parse the argument \"" + argumentName + "\": " + e.what())
+        throw WhispArgException("Failed to parse the argument \"" + argumentName + "\": " + e.what());
     }
 }
 
