@@ -72,6 +72,13 @@ class Flag
     bool _Value;
 };
 
+/// @brief Converts the Flag object to a string.
+std::ostream &operator<<(std::ostream &os, const Flag &flag)
+{
+    os << flag.ToString();
+    return os;
+}
+
 const Flag Flag::True = Flag(true);
 const Flag Flag::False = Flag(false);
 } // namespace type
@@ -184,7 +191,7 @@ template <typename T> class Argument
         }
         ss << "\n";
         ss << "    " << _Description;
-        if(_DefaultValue.has_value())
+        if (_DefaultValue.has_value())
         {
             ss << " (Default: " << _DefaultValue.value() << ")";
         }
@@ -200,7 +207,7 @@ template <typename T> class Argument
     std::optional<T> _Value;
 
     Argument(const std::string &shortName, const std::string &name)
-        : _Name(name), _ShortName(shortName), _Description(), _DefaultValue(std::nullopt),_IsRequired(false)
+        : _Name(name), _ShortName(shortName), _Description(), _DefaultValue(std::nullopt), _IsRequired(false)
     {
     }
 
