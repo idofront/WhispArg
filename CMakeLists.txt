@@ -73,7 +73,12 @@ file(GLOB TEST_SOURCES "test/**/*.cpp")
 # 各テストソースファイルごとにテストターゲットを生成
 foreach(TEST_SOURCE ${TEST_SOURCES})
   get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
-  add_executable(${TEST_NAME} ${TEST_SOURCE} $<TARGET_OBJECTS:Builder>)
+  # src ディレクトリのオブジェクトライブラリが存在する場合はリンク
+  if (SRC_FILES)
+    add_executable(${TEST_NAME} ${TEST_SOURCE} $<TARGET_OBJECTS:Builder>)
+  else()
+    add_executable(${TEST_NAME} ${TEST_SOURCE})
+  endif()
   target_include_directories(${TEST_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src)
   target_link_libraries(${TEST_NAME} ${subproject_names} GTest::GTest GTest::Main)
   add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
