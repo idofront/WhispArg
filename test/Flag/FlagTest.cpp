@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <idofront/WhispArg.hpp>
 
-using namespace idofront::argument::type;
+using namespace idofront::whisparg::type;
 
 TEST(FlagTest, DefaultConstructorShouldBeFalse)
 {
