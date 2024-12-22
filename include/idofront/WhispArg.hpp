@@ -36,12 +36,12 @@
 
 namespace idofront
 {
-namespace argument
+namespace whisparg
 {
 namespace type
 {
-/// @brief A class for specifying flag options in the Parser.
-/// @note Even if you specify a bool in the Parser, you need to provide either "true" or "false" as an argument.
+/// @brief A class for specifying flag options in the WhispArg.
+/// @note Even if you specify a bool in the WhispArg, you need to provide either "true" or "false" as an argument.
 ///       However, by using the Flag class, you can specify "true" without providing any arguments.
 class Flag
 {
@@ -464,12 +464,12 @@ class ArgumentInformation
 
 /// @brief A class that parses command-line arguments.
 /// @note Although you can parse arguments using the Parse() function directly,
-///       using the Parser class allows you to generate help messages from multiple command-line arguments.
-class Parser
+///       using the WhispArg class allows you to generate help messages from multiple command-line arguments.
+class WhispArg
 {
   public:
-    /// @brief Constructs a Parser object to parse command-line arguments.
-    Parser(int argc, char *argv[]) : _ArgumentValues(std::vector<std::string>(argv, argv + argc))
+    /// @brief Constructs a WhispArg object to parse command-line arguments.
+    WhispArg(int argc, char *argv[]) : _ArgumentValues(std::vector<std::string>(argv, argv + argc))
     {
     }
 
@@ -480,8 +480,8 @@ class Parser
         auto information = ArgumentInformation::New(argument);
         _ArgumentInformations.push_back(information);
 
-        auto result = ::idofront::argument::Parse(_ArgumentValues, argument);
-        return result.has_value() ? idofront::argument::Argument<T>::Update(argument, result) : argument;
+        auto result = ::idofront::whisparg::Parse(_ArgumentValues, argument);
+        return result.has_value() ? idofront::whisparg::Argument<T>::Update(argument, result) : argument;
     }
 
     /// @brief Displays a help message based on the Argument objects that have been parsed so far.
@@ -627,7 +627,7 @@ class Parser
     }
 };
 
-} // namespace argument
+} // namespace whisparg
 } // namespace idofront
 
 #endif
