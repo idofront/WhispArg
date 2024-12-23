@@ -59,12 +59,12 @@ namespace type
 class Flag
 {
   public:
-    Flag(bool value = false) : _Value(value)
+    constexpr Flag(bool value = false) : _Value(value)
     {
     }
 
     /// @brief Converts the Flag class to a bool.
-    operator bool() const
+    constexpr operator bool() const
     {
         return _Value;
     }
@@ -189,8 +189,6 @@ template <typename T> class Argument
         std::transform(upperCaseName.begin(), upperCaseName.end(), upperCaseName.begin(),
                        [](char const &c) { return std::toupper(c); });
 
-        auto isFlag = std::is_same_v<T, type::Flag>;
-
         std::stringstream ss;
         ss << "  ";
         if (!_ShortName.empty())
@@ -198,7 +196,7 @@ template <typename T> class Argument
             ss << "-" << _ShortName << ", ";
         }
         ss << "--" << _Name;
-        if (!isFlag)
+        if constexpr (!std::is_same_v<T, type::Flag>)
         {
             ss << " <" << upperCaseName << ">";
         }
@@ -222,6 +220,10 @@ template <typename T> class Argument
     Argument(const std::string &shortName, const std::string &name)
         : _Name(name), _ShortName(shortName), _Description(), _DefaultValue(std::nullopt), _IsRequired(false)
     {
+        if constexpr (std::is_same_v<T, type::Flag>)
+        {
+            Default(type::Flag::False);
+        }
     }
 
     Argument(const std::string &name) : Argument("", name)
@@ -339,7 +341,7 @@ template <typename T> std::optional<T> Parse(std::vector<std::string> argv, cons
                   "Type not supported automatically. Please provide a converter function.");
 
     auto getConverter = std::function<std::function<T(const std::string &)>(const Argument<T> &)>(
-        [](const Argument<T> &) -> std::function<T(const std::string &)> {
+        [](const Argument<T> &argument) -> std::function<T(const std::string &)> {
             if constexpr (std::is_same_v<T, int8_t> || std::is_same_v<T, int16_t> || std::is_same_v<T, int32_t> ||
                           std::is_same_v<T, int64_t>)
             {
@@ -393,7 +395,7 @@ template <typename T> std::optional<T> Parse(std::vector<std::string> argv, cons
             }
             else if constexpr (std::is_same_v<T, type::Flag>)
             {
-                return [](const std::string &) { return type::Flag::True; };
+                return [&argument](const std::string &) { return !argument.Value().value(); };
             }
             else
             {
