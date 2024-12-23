@@ -26,7 +26,14 @@ int main(int argc, char *argv[])
 {
     try
     {
-        auto parser = idofront::whisparg::WhispArg(argc, argv);
+        auto parser =
+            idofront::whisparg::WhispArg(argc, argv)
+                .Description("An example of WhispArg.\n"
+                             "WhispArg is a single-header C++ library for ephemeral CLI parsing. Ideal for throwaway "
+                             "or prototype projects, offering minimal setup, easy syntax, and no bloat. Whisper your "
+                             "arguments in, run them, then let them vanish—just like your code. ")
+                .Name("WhispArgExample")
+                .Version("v0.0.0");
 
         auto helpWidthArgument =
             idofront::whisparg::Argument<uint16_t>::New('w', "help-width")

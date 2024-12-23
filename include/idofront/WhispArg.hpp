@@ -23,6 +23,7 @@
 #define IDOFRONT__ARGUMENT__PARSER_HPP
 
 #include <cctype>
+#include <filesystem>
 #include <functional>
 #include <iostream>
 #include <locale>
@@ -485,8 +486,27 @@ class WhispArg
 {
   public:
     /// @brief Constructs a WhispArg object to parse command-line arguments.
-    WhispArg(int argc, char *argv[]) : _ArgumentValues(std::vector<std::string>(argv, argv + argc))
+    WhispArg(int argc, char *argv[])
+        : _ArgumentValues(std::vector<std::string>(argv, argv + argc)), _ArgumentInformations(), _Description()
     {
+    }
+
+    WhispArg Description(const std::string &description)
+    {
+        _Description = description;
+        return *this;
+    }
+
+    WhispArg Name(const std::string &name)
+    {
+        _Name = name;
+        return *this;
+    }
+
+    WhispArg Version(const std::string &version)
+    {
+        _Version = version;
+        return *this;
     }
 
     /// @brief Parses command-line arguments based on the specified Argument object and returns
@@ -504,10 +524,22 @@ class WhispArg
     /// @param maxWidth The maximum width of the help message.
     void ShowHelp(std::size_t maxWidth = 80)
     {
-        auto helpLines = std::vector<std::string>{
-            "Usage: " + _ArgumentValues[0] + " [options]",
-            "Options:",
-        };
+        auto helpLines = std::vector<std::string>();
+
+        auto applicationName = std::filesystem::path(_Name.empty() ? _ArgumentValues[0] : _Name).filename().string();
+        auto versionString = _Version.empty() ? "" : " " + _Version;
+        auto firstLine = applicationName + versionString;
+        helpLines.push_back(firstLine);
+
+        if (!_Description.empty())
+        {
+            auto applicationSescriptions = WrapLines(_Description, maxWidth);
+            std::for_each(applicationSescriptions.begin(), applicationSescriptions.end(),
+                          [&](const std::string &line) { helpLines.push_back(line); });
+        }
+
+        helpLines.push_back("Usage: " + _ArgumentValues[0] + " [options]");
+        helpLines.push_back("Options:");
 
         std::vector<std::tuple<std::string, std::string>> argumentHelps;
         std::transform(_ArgumentInformations.begin(), _ArgumentInformations.end(), std::back_inserter(argumentHelps),
@@ -586,6 +618,9 @@ class WhispArg
   private:
     std::vector<std::string> _ArgumentValues;
     std::vector<ArgumentInformation> _ArgumentInformations;
+    std::string _Description;
+    std::string _Name;
+    std::string _Version;
 
     /// @brief Wraps text to the specified width.
     /// @note Takes newline characters in @c text into account.
