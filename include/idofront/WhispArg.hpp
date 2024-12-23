@@ -491,18 +491,21 @@ class WhispArg
     {
     }
 
+    /// @brief Sets the description of the application.
     WhispArg Description(const std::string &description)
     {
         _Description = description;
         return *this;
     }
 
+    /// @brief Sets the name of the application.
     WhispArg Name(const std::string &name)
     {
         _Name = name;
         return *this;
     }
 
+    /// @brief Sets the version of the application.
     WhispArg Version(const std::string &version)
     {
         _Version = version;
