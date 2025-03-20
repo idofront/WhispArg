@@ -43,12 +43,21 @@ namespace whisparg
 class WhispArgException : public std::exception
 {
   public:
-    WhispArgException(const std::string &msg) : msg(msg)
+    /// @brief Construct the exception with a given message.
+    /// @param msg The error message.
+    explicit WhispArgException(const std::string &msg) : _Msg(msg)
     {
     }
 
+    /// @brief Retrieve the error message.
+    /// @return A C-style string describing the error.
+    const char *what() const noexcept override
+    {
+        return _Msg.c_str();
+    }
+
   private:
-    std::string msg;
+    std::string _Msg;
 };
 
 namespace type
