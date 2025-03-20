@@ -26,7 +26,7 @@ The name originates from “Whisper,” conveying the notion of something that q
 
 ## 3. Installation
 
-1. Download or copy `WhispArg.hpp` from the [WhispArg repository](https://github.com/yourname/WhispArg).  
+1. Download or copy `WhispArg.hpp` from the [WhispArg repository](https://github.com/idofront/WhispArg/).  
 2. Place `WhispArg.hpp` in the same directory as your project source code, or in any header include path of your choice.  
 3. Include it in your code via `#include "WhispArg.hpp"`.
 
